@@ -37,8 +37,10 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Slack",    NULL,       NULL,       1 << 0,            0,      1  },
-	{ "Chrome",   NULL,       NULL,       1 << 0,            0,      0  },
+	{ "Slack",    NULL,       NULL,       1 << 2,            0,      0  },
+	{ "Google-chrome",   NULL,       NULL,       1 << 0,            0,      0  },
+	{ NULL,   NULL,       "dvtm",       1 << 1,            0,      0  },
+	{ NULL,   NULL,       "urxvt",       1 << 8,            0,      0  },
 };
 
 /* layout(s) */
