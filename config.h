@@ -43,6 +43,7 @@ static const Rule rules[] = {
 	{ NULL,             NULL,      "dvtm",   1 << 1,        0,           0  },
 	{ NULL,             NULL,      "urxvt",  1 << 8,        0,           0  },
 	{ "discord",        NULL,      NULL,     1 << 3,        0,           0  },
+	{ "Spotify",        NULL,      NULL,     1 << 4,        0,           0  },
 };
 
 /* layout(s) */
