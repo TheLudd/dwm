@@ -13,7 +13,7 @@ static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const double activeopacity   = 1.0f;     /* Window opacity when it's focused (0 <= opacity <= 1) */
-static const double inactiveopacity = 0.875f;   /* Window opacity when it's inactive (0 <= opacity <= 1) */
+static const double inactiveopacity = 1.0f;   /* Window opacity when it's inactive (0 <= opacity <= 1) */
 static const Bool viewontag         = true;     /* Switch view on tag switch */
 static const char *fonts[]          = { "monospace:size=10", "FontAwesome:size=10.5" };
 static const char dmenufont[]       = "monospace:size=10";
