@@ -44,6 +44,7 @@ static const Rule rules[] = {
 	{ NULL,             NULL,      "urxvt",  1 << 8,        0,           0  },
 	{ "discord",        NULL,      NULL,     1 << 3,        0,           0  },
 	{ "Spotify",        NULL,      NULL,     1 << 4,        0,           0  },
+	{ "MPlayer",        NULL,      NULL,     1 << 5,        0,           0  },
 };
 
 /* layout(s) */
