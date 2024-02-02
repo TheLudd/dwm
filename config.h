@@ -40,7 +40,7 @@ static const Rule rules[] = {
 	// class,           instance,  title,    tags << mask,  isfloating,  monitor
 	{ "Slack",          NULL,      NULL,     1 << 2,        0,           0  },
 	{ "Google-chrome",  NULL,      NULL,     1 << 0,        0,           0  },
-	{ NULL,             NULL,      "dvtm",   1 << 1,        0,           0  },
+	{ NULL,             NULL,      "a4",   1 << 1,        0,           0  },
 	{ NULL,             NULL,      "urxvt",  1 << 8,        0,           0  },
 	{ "discord",        NULL,      NULL,     1 << 3,        0,           0  },
 	{ "Spotify",        NULL,      NULL,     1 << 4,        0,           0  },
@@ -85,7 +85,7 @@ static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "togg
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-l", "10", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", "-e", "dvtm" };
+static const char *termcmd[]  = { "st", "-e", "a4" };
 static const char *chromecmd[]  = { "google-chrome-stable", NULL };
 static const char *slackcmd[]  = { "slack", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
