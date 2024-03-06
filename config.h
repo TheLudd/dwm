@@ -15,8 +15,13 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const double activeopacity   = 1.0f;     /* Window opacity when it's focused (0 <= opacity <= 1) */
 static const double inactiveopacity = 1.0f;   /* Window opacity when it's inactive (0 <= opacity <= 1) */
 static const Bool viewontag         = true;     /* Switch view on tag switch */
-static const char *fonts[]          = { "monospace:size=10", "FontAwesome:size=10.5" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[] = {
+    "Liberation Mono:pixelsize=12:antialias=true:autohint=true",
+    "Noto Color Emoji:pixelsize=12:antialias=true:autohint=true",
+    "Hack Nerd Font Mono:pixelsize=12:antialias=true:autohint=true",
+};
+static const char dmenufont[] = "Liberation Mono:size=10";
+
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
