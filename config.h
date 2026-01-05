@@ -76,6 +76,7 @@ static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "togg
 
 /* dictating */
 static const char *dicttoggle[] = { "dictation-toggle", NULL };
+static const char *dictbackend[] = { "dictation-backend", "toggle", NULL };
 
 /* key definitions */
 #define MODKEY Mod4Mask
@@ -106,6 +107,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_q,      spawn,          {.v = lockcmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = screenshotcmd } },
 	{ MODKEY,                       XK_v,      spawn,          {.v = dicttoggle } },
+	{ MODKEY|ShiftMask,             XK_v,      spawn,          {.v = dictbackend } },
 	{ MODKEY|ShiftMask,             XK_s,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
