@@ -74,6 +74,17 @@ static const char *upvol[]   = { "/usr/bin/pactl", "set-sink-volume", "0", "+5%"
 static const char *downvol[] = { "/usr/bin/pactl", "set-sink-volume", "0", "-5%",     NULL };
 static const char *mutevol[] = { "/usr/bin/pactl", "set-sink-mute",   "0", "toggle",  NULL };
 
+/* dictating */
+static const char *dictbegin_en[] = { 
+    "nerd-dictation", "begin", 
+    "--vosk-model-dir", "/home/ludwig/.config/nerd-dictation/models/vosk-model-small-en-us-0.15", 
+    NULL 
+};
+
+static const char *dictend[] = { 
+    "nerd-dictation", "end", 
+    NULL 
+};
 
 /* key definitions */
 #define MODKEY Mod4Mask
@@ -103,7 +114,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,      spawn,          {.v = slackcmd } },
 	{ MODKEY,                       XK_q,      spawn,          {.v = lockcmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = screenshotcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
+  { MODKEY|ShiftMask,             XK_d,      spawn,          {.v = dictbegin_en } },
+  { MODKEY|ShiftMask,             XK_t,      spawn,          {.v = dictend } },
+	{ MODKEY|ShiftMask,             XK_s,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_j,      pushdown,       {0}  },
