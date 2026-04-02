@@ -97,6 +97,7 @@ static const char *chromecmd[]  = { "google-chrome-stable", NULL };
 static const char *slackcmd[]  = { "slack", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *screenshotcmd[]  = { "screenshot", NULL };
+static const char *screenrecordcmd[]  = { "screen-record", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -106,9 +107,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,      spawn,          {.v = slackcmd } },
 	{ MODKEY,                       XK_q,      spawn,          {.v = lockcmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = screenshotcmd } },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = screenrecordcmd } },
 	{ MODKEY,                       XK_v,      spawn,          {.v = dicttoggle } },
 	{ MODKEY|ShiftMask,             XK_v,      spawn,          {.v = dictbackend } },
-	{ MODKEY|ShiftMask,             XK_s,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_j,      pushdown,       {0}  },
