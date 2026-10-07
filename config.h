@@ -49,6 +49,7 @@ static const Rule rules[] = {
 	{ "discord",        NULL,      NULL,     1 << 3,        0,           0  },
 	{ "Spotify",        NULL,      NULL,     1 << 4,        0,           0  },
 	{ "MPlayer",        NULL,      NULL,     1 << 5,        0,           1  },
+	{ NULL,             "webcam",  NULL,     ~0,            1,           -1 },
 };
 
 /* layout(s) */
@@ -98,6 +99,7 @@ static const char *slackcmd[]  = { "slack", NULL };
 static const char *lockcmd[]  = { "slock", NULL };
 static const char *screenshotcmd[]  = { "screenshot", NULL };
 static const char *screenrecordcmd[]  = { "screen-record", NULL };
+static const char *webcamcmd[]  = { "webcam", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -108,6 +110,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_q,      spawn,          {.v = lockcmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = screenshotcmd } },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = screenrecordcmd } },
+	{ MODKEY,                       XK_w,      spawn,          {.v = webcamcmd } },
 	{ MODKEY,                       XK_v,      spawn,          {.v = dicttoggle } },
 	{ MODKEY|ShiftMask,             XK_v,      spawn,          {.v = dictbackend } },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
