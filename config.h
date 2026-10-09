@@ -100,6 +100,7 @@ static const char *lockcmd[]  = { "slock", NULL };
 static const char *screenshotcmd[]  = { "screenshot", NULL };
 static const char *screenrecordcmd[]  = { "screen-record", NULL };
 static const char *webcamcmd[]  = { "webcam", NULL };
+static const char *webcamfullcmd[]  = { "webcam", "fullscreen", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -111,6 +112,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_s,      spawn,          {.v = screenshotcmd } },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = screenrecordcmd } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = webcamcmd } },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          {.v = webcamfullcmd } },
 	{ MODKEY,                       XK_v,      spawn,          {.v = dicttoggle } },
 	{ MODKEY|ShiftMask,             XK_v,      spawn,          {.v = dictbackend } },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
