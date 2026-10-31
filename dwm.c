@@ -55,6 +55,7 @@
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
+#define CENTERSEP               '\x1f' /* status text before this byte goes in the middle */
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
@@ -279,7 +280,8 @@ static void zoom(const Arg *arg);
 /* variables */
 static Systray *systray =  NULL;
 static const char broken[] = "broken";
-static char stext[256];
+static char stext[256];       /* status text drawn at the right */
+static char ctext[256];       /* status text drawn in the middle */
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar geometry */
@@ -828,7 +830,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, stw = 0;
+	int x, w, tw = 0, stw = 0, cw, cx;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -874,6 +876,15 @@ drawbar(Monitor *m)
 		} else {
 			drw_setscheme(drw, scheme[SchemeNorm]);
 			drw_rect(drw, x, 0, w, bh, 1, 1);
+		}
+	}
+
+	if (m == selmon && ctext[0]) {
+		cw = TEXTW(ctext);
+		cx = (m->ww - cw) / 2;
+		if (cx >= x && cx + cw <= m->ww - tw - stw) {
+			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_text(drw, cx, 0, cw, bh, lrpad / 2, ctext, 0);
 		}
 	}
 	drw_map(drw, m->barwin, 0, 0, m->ww - stw, bh);
@@ -2357,8 +2368,18 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
-	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
-		strcpy(stext, "dwm-"VERSION);
+	char text[sizeof(ctext) + sizeof(stext)], *sep;
+
+	if (!gettextprop(root, XA_WM_NAME, text, sizeof(text)))
+		strcpy(text, "dwm-"VERSION);
+	if ((sep = strchr(text, CENTERSEP))) {
+		*sep = '\0';
+		snprintf(ctext, sizeof(ctext), "%s", text);
+		snprintf(stext, sizeof(stext), "%s", sep + 1);
+	} else {
+		ctext[0] = '\0';
+		snprintf(stext, sizeof(stext), "%s", text);
+	}
 	drawbar(selmon);
 	updatesystray();
 }
