@@ -21,7 +21,9 @@
  * To understand everything else, start reading main().
  */
 #include <errno.h>
+#include <limits.h>
 #include <locale.h>
+#include <pwd.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -240,6 +242,7 @@ static void setfullscreen(Client *c, int fullscreen);
 static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
+static void setupuserhost(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
@@ -282,6 +285,8 @@ static Systray *systray =  NULL;
 static const char broken[] = "broken";
 static char stext[256];       /* status text drawn at the right */
 static char ctext[256];       /* status text drawn in the middle */
+static char userhost[256];    /* user@host drawn when no window is focused */
+static char userhosttitle[256]; /* user@host and separator drawn before the window title */
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh, blw = 0;      /* bar geometry */
@@ -830,7 +835,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, stw = 0, cw, cx;
+	int x, w, tw = 0, stw = 0, cw, cx, uw;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -868,13 +873,21 @@ drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
 	if ((w = m->ww - tw - stw - x) > bh) {
+		if (m == selmon) {
+			const char *uh = m->sel ? userhosttitle : userhost;
+
+			uw = MIN(TEXTW(uh) - lrpad / 2, w); /* title adds its own left padding */
+			drw_setscheme(drw, scheme[SchemeSel]);
+			x = drw_text(drw, x, 0, uw, bh, lrpad / 2, uh, 0);
+			w -= uw;
+		}
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
-			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
 			drw_rect(drw, x, 0, w, bh, 1, 1);
 		}
 	}
@@ -1898,6 +1911,7 @@ setup(void)
 		scheme[i] = drw_scm_create(drw, colors[i], 3);
 	/* init system tray */
 	updatesystray();
+	setupuserhost();
 	/* init bars */
 	updatebars();
 	updatestatus();
@@ -1936,6 +1950,18 @@ seturgent(Client *c, int urg)
 	wmh->flags = urg ? (wmh->flags | XUrgencyHint) : (wmh->flags & ~XUrgencyHint);
 	XSetWMHints(dpy, c->win, wmh);
 	XFree(wmh);
+}
+
+void
+setupuserhost(void)
+{
+	char host[HOST_NAME_MAX + 1] = "?";
+	struct passwd *pw = getpwuid(getuid());
+
+	gethostname(host, sizeof host);
+	host[HOST_NAME_MAX] = '\0';
+	snprintf(userhost, sizeof userhost, "%s@%s", pw ? pw->pw_name : "?", host);
+	snprintf(userhosttitle, sizeof userhosttitle, "%s%s", userhost, userhostsep);
 }
 
 void
