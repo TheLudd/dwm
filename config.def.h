@@ -27,13 +27,8 @@ static const char *colors[][3]      = {
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
-/* SchemeSel per user, from the machine's USERCOLORS file (`sudo make user-colors` writes one) */
-static const UserColors usercolors[] = {
-#if __has_include(USERCOLORS)
-#include USERCOLORS
-#endif
-	{ NULL },
-};
+/* SchemeSel per user: a copy of the machine's USERCOLORS file (`sudo make user-colors` writes one) */
+#include "user-colors.h"
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };

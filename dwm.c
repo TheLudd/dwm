@@ -167,7 +167,7 @@ typedef struct {
 
 typedef struct {
 	const char *user;
-	const char *colors[3]; /* SchemeSel fg, bg, border */
+	const char **colors; /* SchemeSel fg, bg, border */
 } UserColors;
 
 typedef struct Systray   Systray;
@@ -1979,7 +1979,7 @@ selcolors(void)
 
 	for (uc = usercolors; uc->user; uc++)
 		if (!strcmp(uc->user, user))
-			return (const char **)uc->colors;
+			return uc->colors;
 	return (const char **)colors[SchemeSel];
 }
 

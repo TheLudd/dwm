@@ -16,17 +16,28 @@ ember #1a1a1a #d9822b
 mint #1a1a1a #7fc8a9
 sand #1a1a1a #d8c7a0'
 
-echo '/* SchemeSel colors per user, compiled into dwm. Rebuild dwm after editing.'
-echo ' *'
-echo ' * suggested combinations:'
-echo ' *   name        fg         bg / border'
-echo "$palette" | awk '{ printf " *   %-11s %s    %s\n", $1, $2, $3 }'
-echo ' */'
-echo '	/* user          fg           bg           border */'
-
 getent passwd | awk -F: -v palette="$palette" '
 BEGIN { n = split(palette, combos, "\n") }
 $3 >= 1000 && $3 < 60000 && $7 !~ /(nologin|false)$/ {
-	split(combos[i++ % n + 1], c, " ")
-	printf "\t{ %-14s { \"%s\", \"%s\", \"%s\" } }, /* %s */\n", "\"" $1 "\",", c[2], c[3], c[3], c[1]
+	split(combos[users % n + 1], c, " ")
+	user[++users] = $1
+	combo[users] = c[1]
+	used[c[1]] = 1
+}
+END {
+	print "/* SchemeSel colors per user, compiled into dwm. Rebuild dwm after editing."
+	print " * Uncomment a combination to use it in a row. */"
+	print ""
+	printf "%-43s/* fg         bg         border */\n", ""
+	for (i = 1; i <= n; i++) {
+		split(combos[i], c, " ")
+		printf "%-41s{ \"%s\", \"%s\", \"%s\" };\n", (used[c[1]] ? "" : "// ") "static const char *" c[1] "[] =", c[2], c[3], c[3]
+	}
+	print ""
+	print "static const UserColors usercolors[] = {"
+	print "\t/* user        colors */"
+	for (i = 1; i <= users; i++)
+		printf "\t{ %-13s %s },\n", "\"" user[i] "\",", combo[i]
+	print "\t{ NULL },"
+	print "};"
 }'

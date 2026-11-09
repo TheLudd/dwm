@@ -18,7 +18,11 @@ options:
 	${CC} -c ${CFLAGS} $<
 
 ${OBJ}: config.h config.mk
-dwm.o: $(wildcard ${USERCOLORS})
+dwm.o: user-colors.h
+
+# the machine's USERCOLORS, or the empty table; rewritten only when it differs
+user-colors.h: FORCE
+	@src=${USERCOLORS}; [ -e $$src ] || src=user-colors.def.h; cmp -s $$src $@ || cp $$src $@
 
 config.h:
 	cp config.def.h $@
@@ -27,7 +31,7 @@ dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 clean:
-	rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz
+	rm -f dwm ${OBJ} user-colors.h dwm-${VERSION}.tar.gz
 
 dist: clean
 	mkdir -p dwm-${VERSION}
@@ -55,4 +59,4 @@ uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 
-.PHONY: all options clean dist install uninstall user-colors
+.PHONY: all options clean dist install uninstall user-colors FORCE
