@@ -165,6 +165,11 @@ typedef struct {
 	int monitor;
 } Rule;
 
+typedef struct {
+	const char *user;
+	const char *colors[3]; /* SchemeSel fg, bg, border */
+} UserColors;
+
 typedef struct Systray   Systray;
 struct Systray {
 	Window win;
@@ -243,6 +248,7 @@ static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
 static void setupuserhost(void);
+static const char **selcolors(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
@@ -285,6 +291,7 @@ static Systray *systray =  NULL;
 static const char broken[] = "broken";
 static char stext[256];       /* status text drawn at the right */
 static char ctext[256];       /* status text drawn in the middle */
+static char user[64];         /* login name of the user running dwm */
 static char userhost[256];    /* user@host drawn when no window is focused */
 static char userhosttitle[256]; /* user@host and separator drawn before the window title */
 static int screen;
@@ -1906,12 +1913,12 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
+	setupuserhost();
 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
 	for (i = 0; i < LENGTH(colors); i++)
-		scheme[i] = drw_scm_create(drw, colors[i], 3);
+		scheme[i] = drw_scm_create(drw, i == SchemeSel ? selcolors() : colors[i], 3);
 	/* init system tray */
 	updatesystray();
-	setupuserhost();
 	/* init bars */
 	updatebars();
 	updatestatus();
@@ -1958,10 +1965,22 @@ setupuserhost(void)
 	char host[HOST_NAME_MAX + 1] = "?";
 	struct passwd *pw = getpwuid(getuid());
 
+	snprintf(user, sizeof user, "%s", pw ? pw->pw_name : "?");
 	gethostname(host, sizeof host);
 	host[HOST_NAME_MAX] = '\0';
-	snprintf(userhost, sizeof userhost, "%s@%s", pw ? pw->pw_name : "?", host);
+	snprintf(userhost, sizeof userhost, "%s@%s", user, host);
 	snprintf(userhosttitle, sizeof userhosttitle, "%s%s", userhost, userhostsep);
+}
+
+const char **
+selcolors(void)
+{
+	const UserColors *uc;
+
+	for (uc = usercolors; uc->user; uc++)
+		if (!strcmp(uc->user, user))
+			return (const char **)uc->colors;
+	return (const char **)colors[SchemeSel];
 }
 
 void

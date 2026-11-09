@@ -18,6 +18,7 @@ options:
 	${CC} -c ${CFLAGS} $<
 
 ${OBJ}: config.h config.mk
+dwm.o: $(wildcard ${USERCOLORS})
 
 config.h:
 	cp config.def.h $@
@@ -44,8 +45,14 @@ install: all
 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1
 
+user-colors:
+	@test ! -e ${USERCOLORS} || { echo "${USERCOLORS} exists, edit it or remove it first"; exit 1; }
+	@mkdir -p $(dir ${USERCOLORS})
+	@./user-colors.sh > ${USERCOLORS}
+	@echo ${USERCOLORS}
+
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 
-.PHONY: all options clean dist install uninstall
+.PHONY: all options clean dist install uninstall user-colors
