@@ -292,7 +292,7 @@ static const char broken[] = "broken";
 static char stext[256];       /* status text drawn at the right */
 static char ctext[256];       /* status text drawn in the middle */
 static char user[64];         /* login name of the user running dwm */
-static char userhost[256];    /* user@host drawn when no window is focused */
+static char userhost[sizeof user + HOST_NAME_MAX + 1]; /* user@host drawn when no window is focused */
 static char userhosttitle[256]; /* user@host and separator drawn before the window title */
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
@@ -2419,11 +2419,11 @@ updatestatus(void)
 		strcpy(text, "dwm-"VERSION);
 	if ((sep = strchr(text, CENTERSEP))) {
 		*sep = '\0';
-		snprintf(ctext, sizeof(ctext), "%s", text);
-		snprintf(stext, sizeof(stext), "%s", sep + 1);
+		snprintf(ctext, sizeof(ctext), "%.*s", (int)sizeof(ctext) - 1, text);
+		snprintf(stext, sizeof(stext), "%.*s", (int)sizeof(stext) - 1, sep + 1);
 	} else {
 		ctext[0] = '\0';
-		snprintf(stext, sizeof(stext), "%s", text);
+		snprintf(stext, sizeof(stext), "%.*s", (int)sizeof(stext) - 1, text);
 	}
 	drawbar(selmon);
 	updatesystray();
